@@ -1,6 +1,7 @@
 :root {
-    --morado: #552F7E;
+    --morado: #8300C4;
     --rosado: #D14081;
+    --blanco: #FFFFFF
 }
 .header{
     background-color: var(--morado);
@@ -26,4 +27,23 @@
     color: var(--rosado);
     text-align: center;
     font-weight: bold;
+}
+
+.header__enlace{
+    transition-property: transform;;
+    transition-duration: 0.3s;
+}
+
+.header__enlace:hover{
+    transform: scale(1.2);
+}
+
+.footer{
+    background-color: var(--morado);
+}
+
+.footer__parrafo{
+    padding: 10px 0;
+    text-align: center;
+    color: var(--blanco);
 }
