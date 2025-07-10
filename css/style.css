@@ -1,0 +1,29 @@
+:root {
+    --morado: #552F7E;
+    --rosado: #D14081;
+}
+.header{
+    background-color: var(--morado);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nube__imagen{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 500px; 
+    height: 150px; 
+    background-image: url('../src/img/Nube.png'); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.nube__heading{
+    color: var(--rosado);
+    text-align: center;
+    font-weight: bold;
+}
