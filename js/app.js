@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     anteriorButton.addEventListener('click', () => {
-        console.log('Anterior');
         dialogoIndice--;
         if (dialogoIndice < 0) {
             dialogoIndice = 0; // Evita que el índice sea menor que 0
@@ -73,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     siguienteButton.addEventListener('click', () => {
-        console.log('Siguiente')
         dialogoIndice++;
         if (dialogoIndice >= dialogos.length) {
             dialogoIndice = dialogos.length - 1; // Evita que el índice sea mayor que el número de diálogos
