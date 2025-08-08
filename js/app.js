@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const dialogos = [
         {
             persona: 'Tito', 
-            texto: 'Esta es la sala de psicología '
+            texto: 'Esta es la sala de psicología.'
         },
         {
             persona: 'Tito', 
-            texto: 'Las niñas y niños ven a una psicóloga o psicólogo para hablar de sus emociones y decirle cómo se sienten'
+            texto: 'Las niñas y niños ven a una psicóloga o psicólogo para hablar de sus emociones y decirle cómo se sienten.'
         },
         {
             persona: 'Tito', 
-            texto: 'Conozcamos a la psicóloga'
+            texto: 'Conozcamos a la psicóloga.'
         },
         {
             persona: 'Psicóloga', 
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             persona: 'Psicóloga', 
-            texto: '¡En este lugar puedes hablar de lo que quieras!, de lo que sientas. Todo lo que me quieras contar está bien y no le diré a nadie'
+            texto: '¡En este lugar puedes hablar de lo que quieras!, de lo que sientas. Todo lo que me quieras contar está bien y no le diré a nadie.'
         },
         {
             persona: 'Tito', 
@@ -79,95 +79,117 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarDialogo(dialogoIndice);
     })
 
-function mostrarDialogo(indice){
-    const dialogo = dialogos[indice];
+    function mostrarDialogo(indice){
+        const dialogo = dialogos[indice];
 
-    // Reset todos los estados
-    titoContenedor.classList.remove('oculto');
-    titoContenedorDialogo.classList.remove('oculto', 'flex');
-    psicologaContenedor.classList.remove('oculto');
-    psicologaContenedorDialogo.classList.remove('oculto', 'flex');
-
-    // Estado por defecto (antes del índice 3)
-    if (indice < 3) {
-        // Mostrar solo Tito en su posición original
-        titoContenedor.style.gridColumnStart = '2';
-        titoContenedor.style.gridColumnEnd = '3';
-        titoContenedorDialogo.style.gridColumnStart = '3';
-        titoContenedorDialogo.style.gridColumnEnd = '5';
-
-        itzelContenedor.style.height = '95%';
-        itzelImagen.style.transform = 'scale(1.2)';
-
-        psicologaContenedor.classList.add('oculto');
-        psicologaContenedorDialogo.classList.add('oculto');
-    }
-
-    //itzel y la psicologa van dentro del escenario 
-    else if (indice === 3 || indice === 4) {
-        titoContenedor.classList.add('oculto');
-        titoContenedorDialogo.classList.add('oculto');
-
-        psicologaContenedor.style.gridColumnStart = '2';
-        psicologaContenedor.style.gridColumnEnd = '3';
-        psicologaContenedor.style.height= '75%'
-
-        psicologaImagen.style.transform = 'scale(1.25)';
-        psicologaImagen.style.marginLeft = '2rem';
-
-        itzelContenedor.style.height = '85%'; 
-        itzelImagen.style.transform = 'scale(1)';
-
-
-        psicologaContenedorDialogo.style.gridColumnStart = '3';
-        psicologaContenedorDialogo.style.gridColumnEnd = '5';
-        psicologaContenedorDialogo.style.height= '65%';
-
-    }
-
-    //tito, itzel y la psicologa están fuera del escenario 
-    else if (indice >= 5) {
+        // Reset todos los estados
         titoContenedor.classList.remove('oculto');
-        titoContenedorDialogo.classList.remove('oculto');
+        titoContenedorDialogo.classList.remove('oculto', 'flex');
+        psicologaContenedor.classList.remove('oculto');
+        psicologaContenedorDialogo.classList.remove('oculto', 'flex');
 
-        titoContenedor.style.gridColumnStart = '3';
-        titoContenedor.style.gridColumnEnd = '4';
-        titoContenedorDialogo.style.gridColumnStart = '4';
-        titoContenedorDialogo.style.gridColumnEnd = '6';
+        // Estado por defecto (antes del índice 3)
+        if (indice < 3) {
+            // Mostrar solo Tito en su posición original
+            titoContenedor.style.gridColumnStart = '2';
+            titoContenedor.style.gridColumnEnd = '3';
+            titoContenedorDialogo.style.gridColumnStart = '3';
+            titoContenedorDialogo.style.gridColumnEnd = '5';
 
-        psicologaContenedor.style.gridColumnStart = '2';
-        psicologaContenedor.style.gridColumnEnd = '3';
-        psicologaContenedor.style.height = '85%'
-        psicologaContenedorDialogo.style.gridColumnStart = '3';
-        psicologaContenedorDialogo.style.gridColumnEnd = '5';
-        psicologaContenedorDialogo.style.height = '80%'
-        psicologaImagen.style.transform = 'scale(1.5)';
-        psicologaImagen.style.marginLeft = '0';
+            itzelContenedor.style.height = '95%';
+            itzelImagen.style.transform = 'scale(1.2)';
 
-        itzelContenedor.style.height = '95%';
-        itzelImagen.style.transform = 'scale(1.2)';
+            psicologaContenedor.classList.add('oculto');
+            psicologaContenedorDialogo.classList.add('oculto');
+        }
+
+        //itzel y la psicologa van dentro del escenario 
+        else if (indice === 3 || indice === 4) {
+            titoContenedor.classList.add('oculto');
+            titoContenedorDialogo.classList.add('oculto');
+
+            psicologaContenedor.style.gridColumnStart = '2';
+            psicologaContenedor.style.gridColumnEnd = '3';
+            psicologaContenedor.style.height= '75%'
+
+            psicologaImagen.style.transform = 'scale(1.25)';
+            psicologaImagen.style.marginLeft = '2rem';
+
+            itzelContenedor.style.height = '85%'; 
+            itzelImagen.style.transform = 'scale(1)';
+
+
+            psicologaContenedorDialogo.style.gridColumnStart = '3';
+            psicologaContenedorDialogo.style.gridColumnEnd = '5';
+            psicologaContenedorDialogo.style.height= '65%';
+
+        }
+
+        //tito, itzel y la psicologa están fuera del escenario 
+        else if (indice >= 5) {
+            titoContenedor.classList.remove('oculto');
+            titoContenedorDialogo.classList.remove('oculto');
+
+            titoContenedor.style.gridColumnStart = '3';
+            titoContenedor.style.gridColumnEnd = '4';
+            titoContenedorDialogo.style.gridColumnStart = '4';
+            titoContenedorDialogo.style.gridColumnEnd = '6';
+
+            psicologaContenedor.style.gridColumnStart = '2';
+            psicologaContenedor.style.gridColumnEnd = '3';
+            psicologaContenedor.style.height = '85%'
+            psicologaContenedorDialogo.style.gridColumnStart = '3';
+            psicologaContenedorDialogo.style.gridColumnEnd = '5';
+            psicologaContenedorDialogo.style.height = '80%'
+            psicologaImagen.style.transform = 'scale(1.5)';
+            psicologaImagen.style.marginLeft = '0';
+
+            itzelContenedor.style.height = '95%';
+            itzelImagen.style.transform = 'scale(1.2)';
+        }
+
+        // Mostrar el diálogo correspondiente
+        if (dialogo.persona === 'Tito') {
+            titoContenedorDialogo.classList.remove('oculto');
+            titoContenedorDialogo.classList.add('flex');
+            psicologaContenedorDialogo.classList.remove('flex');
+            psicologaContenedorDialogo.classList.add('oculto');
+            //codigo modificado
+            const titoParrafo =  titoContenedorDialogo.querySelector('.tito__dialogo__parrafo');
+            eliminarTextoAnterior(titoParrafo)
+            generarEfectoTyping(dialogo.texto, titoParrafo)
+            //termina código modificado
+            titoImagen.src = 'src/img/Titto-hablando.png';
+            psicologaImagen.src = 'src/img/Psicologa.png';
+
+        } else if (dialogo.persona === 'Psicóloga') {
+            psicologaContenedorDialogo.classList.remove('oculto');
+            psicologaContenedorDialogo.classList.add('flex');
+            titoContenedorDialogo.classList.remove('flex');
+            titoContenedorDialogo.classList.add('oculto');
+            const psicologaParrafo = psicologaContenedorDialogo.querySelector('.psicologa__dialogo__parrafo');
+            eliminarTextoAnterior(psicologaParrafo);
+            generarEfectoTyping(dialogo.texto, psicologaParrafo)
+            titoImagen.src = 'src/img/Tito.png';
+            psicologaImagen.src = 'src/img/Psicologa-hablando.png';
+        }
     }
 
-    // Mostrar el diálogo correspondiente
-    if (dialogo.persona === 'Tito') {
-        titoContenedorDialogo.classList.remove('oculto');
-        titoContenedorDialogo.classList.add('flex');
-        psicologaContenedorDialogo.classList.remove('flex');
-        psicologaContenedorDialogo.classList.add('oculto');
-        titoContenedorDialogo.querySelector('.tito__dialogo__parrafo').textContent = dialogo.texto;
-        titoImagen.src = 'src/img/Titto-hablando.png';
-        psicologaImagen.src = 'src/img/Psicologa.png';
-    } else if (dialogo.persona === 'Psicóloga') {
-        psicologaContenedorDialogo.classList.remove('oculto');
-        psicologaContenedorDialogo.classList.add('flex');
-        titoContenedorDialogo.classList.remove('flex');
-        titoContenedorDialogo.classList.add('oculto');
-        psicologaContenedorDialogo.querySelector('.psicologa__dialogo__parrafo').textContent = dialogo.texto;
-        titoImagen.src = 'src/img/Tito.png';
-        psicologaImagen.src = 'src/img/Psicologa-hablando.png';
-    }
-}
+    function generarEfectoTyping(texto, elemento, indice = 0){
 
+        elemento.textContent += texto[indice];
+        
+        if(indice == texto.length -1 ) return
+
+        setTimeout(() => {
+            generarEfectoTyping(texto, elemento, indice + 1 )
+        }, 50);
+
+    }
+
+    function eliminarTextoAnterior(elemento){
+        elemento.textContent = ''
+    }
 
 
 })
