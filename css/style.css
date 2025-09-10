@@ -221,6 +221,7 @@ h1, p{
 }
 
 .tito__dialogo{
+    position: relative;
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -229,6 +230,7 @@ h1, p{
     border-radius: 2rem;
 }
 .psicologa__dialogo{
+    position: relative;
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -273,21 +275,81 @@ h1, p{
     text-align: center;
 }
 
-.contenedor__botones:nth-child(7){
-    grid-column-start: 4;
-    grid-column-end: 6;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    justify-content: center;
-    margin-top: 1rem;
-}
-
 .oculto {
     display: none;
 }
 
 .flex {
     display: flex;
+}
+
+@keyframes clickable {
+    0%{
+        filter: drop-shadow(0 0 .5rem #0000004d);
+        transform: scale(1)
+    }
+    to {
+        filter: drop-shadow(0 0 1rem #00000080);
+        transform: scale(1.05)
+    }
+}
+
+.animate-clickable{
+    animation: 0.4s infinite alternate clickable;
+}
+
+.imagen_cerrar_dialogo_tito{
+    width: 11%;
+    position: absolute;
+    left: 390px;
+    top: -20px;
+    cursor: pointer;
+    color: white;
+}
+
+.imagen_cerrar_dialogo_tito:hover{
+    scale: 110%;
+    filter: brightness(150%);
+}
+
+.imagen_cerrar_dialogo_psicologa{
+    width: 11%;
+    position: absolute;
+    left: 390px;
+    top: -20px;
+    cursor: pointer;
+    color: white;
+}
+
+.imagen_cerrar_dialogo_psicologa:hover{
+    scale: 110%;
+    filter: brightness(150%);
+}
+
+.btn-dialogo, .btn-sonido{
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    display: inline-block;
+    height: auto;
+    width: auto;
+    z-index: 10;
+}
+
+.btn-sonido{
+    top: 0;
+    right: 180px;
+}
+
+.btn-dialogo:hover, .btn-sonido:hover{
+    scale: 115%;
+    rotate: 5;
+    cursor: pointer;
+}
+
+.btn-dialogo{
+    top: 0;
+    left: 180px;
 }
 
