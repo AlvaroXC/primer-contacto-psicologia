@@ -172,6 +172,10 @@ h1, p{
     grid-column-end: 4;
 }
 
+.tito__contenedor:hover, .psicologa__contenedor:hover{
+    cursor: pointer;
+}
+
 .escenario__contenedor img{
     width: 100%;
     height: 100%;
@@ -301,8 +305,8 @@ h1, p{
 .imagen_cerrar_dialogo_tito{
     width: 11%;
     position: absolute;
-    left: 390px;
-    top: -20px;
+    right: -4%;
+    top: -10%;
     cursor: pointer;
     color: white;
 }
@@ -315,8 +319,8 @@ h1, p{
 .imagen_cerrar_dialogo_psicologa{
     width: 11%;
     position: absolute;
-    left: 390px;
-    top: -20px;
+    right: -4%;
+    top: -10%;
     cursor: pointer;
     color: white;
 }
@@ -339,7 +343,7 @@ h1, p{
 
 .btn-sonido{
     top: 0;
-    right: 180px;
+    right: 10%;
 }
 
 .btn-dialogo:hover, .btn-sonido:hover{
@@ -350,6 +354,5 @@ h1, p{
 
 .btn-dialogo{
     top: 0;
-    left: 180px;
+    left: 10%;
 }
-

@@ -1,6 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-    addAnimation();
-})
+import { dialogos } from "./dialogos.js";
 
 const psicologaContenedorDialogo = document.querySelector('.psicologa__contenedor__dialogo');
 const titoContenedorDialogo = document.querySelector('.tito__contenedor__dialogo')
@@ -15,86 +13,71 @@ const itzelContenedor = document.querySelector('.itzel__contenedor');
 
 const imagenCerrarDialogo = document.querySelector('.imagen_cerrar_dialogo_tito');
 const imagenCerrarDialogoPsicologa = document.querySelector('.imagen_cerrar_dialogo_psicologa');
+const audioLobby = document.querySelector('.audio_lobby');
 
 const buttonSonido = document.querySelector('.btn-sonido');
 const buttonDialogo = document.querySelector('.btn-dialogo');
 
-imagenCerrarDialogoPsicologa.addEventListener('click', ()=> {
-    ocultarElemento(psicologaContenedorDialogo);
-})
+const btnSonidoImagen = document.querySelector('.btn-sonido img');
 
-imagenCerrarDialogo.addEventListener('click', () => {
-    ocultarElemento(titoContenedorDialogo); 
-})
-
-
-buttonDialogo.addEventListener('click', ()=>{
-    console.log('Presionando botón de dialogo')
-})
-
-buttonSonido.addEventListener('click', ()=>{
-    console.log('Presionando el boton de sonido')
-})
-
-
-//array de dialogos
-const dialogos = [
-    {
-        persona: 'Tito', 
-        texto: 'Esta es la sala de psicología.'
-    },
-    {
-        persona: 'Tito', 
-        texto: 'Las niñas y niños ven a una psicóloga o psicólogo para hablar de sus emociones y decirle cómo se sienten.'
-    },
-    {
-        persona: 'Tito', 
-        texto: 'Conozcamos a la psicóloga.'
-    },
-    {
-        persona: 'Psicóloga', 
-        texto: '¡Hola, Itzel, bienvenida! Qué bueno que estés aquí.'
-    },
-    {
-        persona: 'Psicóloga', 
-        texto: 'Yo soy la psicóloga, y mi trabajo es acompañarte y ayudarte en esta experiencia. Estoy aquí para que todo esto sea más fácil para ti.'
-    },
-    {
-        persona: 'Tito', 
-        texto: '¡Las psicólogas son como superheroínas de las emociones! Ayudan a que te sientas mejor.'
-    },
-    {
-        persona: 'Psicóloga', 
-        texto: '¡En este lugar puedes hablar de lo que quieras!, de lo que sientas. Todo lo que me quieras contar está bien y no le diré a nadie.'
-    },
-    {
-        persona: 'Tito', 
-        texto: '¡Vamos Itzel! Hay que seguir con este recorrido. Aprenderemos mucho, ¿verdad psicóloga? '
-    },
-    {
-        persona: 'Psicóloga', 
-        texto: 'Claro que sí Tito.  Sigamos Itzel,  descubramos más cosas juntas. Si en algún momento tienes preguntas o algo que quieras contarme, solo dime, ¿de acuerdo?'
-    },
-    {
-        persona: 'Psicóloga', 
-        texto: 'Muy bien, Itzel. Recuerda que todo este proceso es para entenderte mejor y ayudarte. Tú eres muy valiente, y estoy aquí contigo en todo momento.'
-    },
-    {
-        persona: 'Tito', 
-        texto: '¡Eso! No estás sola, Itzel. Estamos aquí para ti.'
-    }
-]
+const imagenes_btn_sonido = {
+    sonido_on: 'src/img/sound_on_3d.png',
+    sonido_off: 'src/img/sound_off_3d.png'
+}
 
 let dialogoIndice = 0; 
 let isTyping = false; 
+let dialogoOculto;
+let btnDialogoActivated = false;   
+
+document.addEventListener('DOMContentLoaded', () => {
+    addAnimation();
+    ocultarBotonDialogo();
+})
+
+imagenCerrarDialogoPsicologa.addEventListener('click', () => {
+    if(isTyping) return;
+    dialogoOculto = psicologaContenedorDialogo;
+    ocultarElemento(dialogoOculto);
+    btnDialogoActivated = true;
+    mostarBotonDialogo()
+})
+
+imagenCerrarDialogo.addEventListener('click', () => {
+    if(isTyping) return;
+    dialogoOculto = titoContenedorDialogo;
+    ocultarElemento(dialogoOculto); 
+    btnDialogoActivated = true;
+    mostarBotonDialogo();
+})
+
+buttonDialogo.addEventListener('click', () => {
+    ocultarBotonDialogo();
+    btnDialogoActivated = false;
+    mostrarElemento(dialogoOculto);
+})
+
+buttonSonido.addEventListener('click', ()=>{
+    //proxima funcionalidad, después de dar click
+    audioLobby.loop = true; 
+    if(audioLobby.paused){
+        btnSonidoImagen.src =imagenes_btn_sonido.sonido_on;
+        audioLobby.play();
+    }else{
+        btnSonidoImagen.src = imagenes_btn_sonido.sonido_off;
+        audioLobby.pause();
+    }
+})
 
 titoImagen.addEventListener('click', async() => {
     if (dialogoIndice < dialogos.length && !isTyping) {
-        console.log('Click en Tito'); 
+        if(btnDialogoActivated){
+            btnDialogoActivated = false;
+            ocultarBotonDialogo();
+        }
         titoContenedor.classList.remove('animate-clickable');
         await mostrarDialogo();
         dialogoIndice++;
-        console.log('Indice de dialogo después de incrementar: ' + dialogoIndice);
         addAnimation();
 
         if (dialogoIndice === 3) {
@@ -108,11 +91,13 @@ titoImagen.addEventListener('click', async() => {
 
 psicologaContenedor.addEventListener('click', async() => {
     if (dialogoIndice < dialogos.length && !isTyping) {
-        console.log('Click en la Psicologa'); 
+        if(btnDialogoActivated){
+            btnDialogoActivated = false;
+            ocultarBotonDialogo();
+        }
         psicologaContenedor.classList.remove('animate-clickable');
         await mostrarDialogo();
         dialogoIndice++;
-        console.log('Indice de dialogo después de incrementar: ' + dialogoIndice);
         addAnimation()
 
         if (dialogoIndice >= 5) {
@@ -122,6 +107,14 @@ psicologaContenedor.addEventListener('click', async() => {
         }
     }
 })
+
+function ocultarBotonDialogo(){
+    buttonDialogo.style.display = 'none';
+}
+
+function mostarBotonDialogo(){
+    buttonDialogo.style.display = 'inline-block';
+}
 
 function addAnimation(){
     const currentCharacter = dialogos[dialogoIndice].persona;
@@ -282,7 +275,6 @@ async function mostrarDialogo() {
     isTyping = true;
 
     await posicionarElementos();
-    console.log('Mostrando diálogo');
     
     const dialogo = dialogos[dialogoIndice];
 
