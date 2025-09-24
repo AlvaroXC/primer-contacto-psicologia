@@ -356,3 +356,53 @@ h1, p{
     top: 0;
     left: 10%;
 }
+
+.tito__contenedor__parrafo, .psicologa__contenedor__parrafo{
+    width: 100%;
+}
+
+.tito__head, .psicologa__head p{
+    font-weight: bold;
+}
+
+.btn-continuar{
+    margin-top: 1rem;
+    background-color: var(--morado);
+    color: var(--blanco);
+    font-weight: bold;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 1rem;
+}
+
+.btn-continuar:hover{
+    cursor: pointer;
+}
+
+.animate-talking-minihead {
+    animation: .11s linear infinite alternate talking-minihead
+}
+
+.animate-talking {
+    animation: .3s linear infinite alternate talking
+}
+
+@keyframes talking-minihead {
+    0% {
+        transform: translateY(0)
+    }
+
+    to {
+        transform: translateY(-.2rem)scale(1.08)
+    }
+}
+
+@keyframes talking {
+    0% {
+        transform: rotate(-2deg)
+    }
+
+    to {
+        transform: rotate(2deg)
+    }
+}

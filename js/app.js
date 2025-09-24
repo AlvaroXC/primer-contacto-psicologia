@@ -11,9 +11,14 @@ const titoContenedor = document.querySelector('.tito__contenedor');
 const psicologaContenedor = document.querySelector('.psicologa__contenedor');
 const itzelContenedor = document.querySelector('.itzel__contenedor');
 
+const contenedorParrafoTito = titoContenedorDialogo.querySelector('.tito__contenedor__parrafo');
+const contenedorParrafoPsicologa = psicologaContenedorDialogo.querySelector('.psicologa__contenedor__parrafo');
+
 const imagenCerrarDialogo = document.querySelector('.imagen_cerrar_dialogo_tito');
 const imagenCerrarDialogoPsicologa = document.querySelector('.imagen_cerrar_dialogo_psicologa');
 const audioLobby = document.querySelector('.audio_lobby');
+const audioTitto = document.querySelector('.audio_tito');
+const audioPsicologa = document.querySelector('.audio_psicologa');
 
 const buttonSonido = document.querySelector('.btn-sonido');
 const buttonDialogo = document.querySelector('.btn-dialogo');
@@ -69,6 +74,25 @@ buttonSonido.addEventListener('click', ()=>{
     }
 })
 
+function reproductiAudioTito(){
+    audioTitto.loop = true; 
+    audioTitto.playbackRate = 1.2;
+    audioTitto.play();
+}
+
+function pausarAudioTito(){
+    audioTitto.pause();
+}
+
+function reproductiAudioPsicologa(){
+    audioPsicologa.loop = true; 
+    audioPsicologa.play();
+}
+
+function pausarAudioPsicologa(){
+    audioPsicologa.pause();
+}
+
 titoImagen.addEventListener('click', async() => {
     if (dialogoIndice < dialogos.length && !isTyping) {
         if(btnDialogoActivated){
@@ -76,14 +100,21 @@ titoImagen.addEventListener('click', async() => {
             ocultarBotonDialogo();
         }
         titoContenedor.classList.remove('animate-clickable');
+        titoContenedor.classList.add('animate-talking');
+        reproductiAudioTito();
         await mostrarDialogo();
+        pausarAudioTito();
+        titoContenedor.classList.remove('animate-talking')
         dialogoIndice++;
         addAnimation();
 
         if (dialogoIndice === 3) {
-            setTimeout(async () => {
-                configurarPosicionIntermedia();
-            }, 1000)
+            const btnContinuar = crearBotonContinuar(); 
+            contenedorParrafoTito.appendChild(btnContinuar); 
+            btnContinuar.addEventListener('click', () => {
+                configurarPosicionIntermedia(); 
+                contenedorParrafoTito.removeChild(btnContinuar);
+            })
         }
 
     }
@@ -96,17 +127,31 @@ psicologaContenedor.addEventListener('click', async() => {
             ocultarBotonDialogo();
         }
         psicologaContenedor.classList.remove('animate-clickable');
+        psicologaContenedor.classList.add('animate-talking');
+        reproductiAudioPsicologa();
         await mostrarDialogo();
+        pausarAudioPsicologa();
+        psicologaContenedor.classList.remove('animate-talking')
         dialogoIndice++;
         addAnimation()
 
-        if (dialogoIndice >= 5) {
-            setTimeout(async () => {
-                configurarPosicionFinal();
-            }, 1000)
+        if (dialogoIndice == 5) {
+            const btnContinuar = crearBotonContinuar(); 
+            contenedorParrafoPsicologa.appendChild(btnContinuar); 
+            btnContinuar.addEventListener('click', () => {
+                configurarPosicionFinal(); 
+                contenedorParrafoPsicologa.removeChild(btnContinuar);
+            })
         }
     }
 })
+
+function crearBotonContinuar(){
+    const buttonContinuar = document.createElement('button'); 
+    buttonContinuar.textContent = 'Continuar';
+    buttonContinuar.classList.add('btn-continuar', 'animate-clickable');
+    return buttonContinuar; 
+}
 
 function ocultarBotonDialogo(){
     buttonDialogo.style.display = 'none';
@@ -252,7 +297,10 @@ async function mostrarDialogoTito(dialogo) {
 
     // Generar efecto typing
     const titoParrafo = titoContenedorDialogo.querySelector('.tito__dialogo__parrafo');
+    const titoHeadImagen = titoContenedorDialogo.querySelector('.tito__head__imagen');
+    titoHeadImagen.classList.add('animate-talking-minihead');
     await generarEfectoTyping(dialogo.texto, titoParrafo);
+    titoHeadImagen.classList.remove('animate-talking-minihead');
 }
 
 async function mostrarDialogoPsicologa(dialogo) {
@@ -266,7 +314,11 @@ async function mostrarDialogoPsicologa(dialogo) {
 
     // Generar efecto typing
     const psicologaParrafo = psicologaContenedorDialogo.querySelector('.psicologa__dialogo__parrafo');
+    const psicologaHeadImagen = document.querySelector('.psicologa__head__imagen');
+    psicologaHeadImagen.classList.add('animate-talking-minihead');
     await generarEfectoTyping(dialogo.texto, psicologaParrafo);
+    psicologaHeadImagen.classList.remove('animate-talking-minihead');
+
 }
 
 // Función principal de mostrar diálogo
