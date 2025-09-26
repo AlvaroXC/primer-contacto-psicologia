@@ -1,24 +1,12 @@
 import { dialogos } from "./dialogos.js";
+import { mostrarElemento, ocultarElemento, aplicarEstilos } from "./helpers.js";
+import { titoContenedorDialogo, titoImagen, titoContenedor, contenedorParrafoTito, audioTitto, imagenCerrarDialogo, IMAGENES_TITO} from "./tito.js"; 
+import { psicologaContenedorDialogo, psicologaImagen, psicologaContenedor, contenedorParrafoPsicologa, audioPsicologa, imagenCerrarDialogoPsicologa, IMAGENES_PSICOLOGA} from "./psicologa.js";
 
-const psicologaContenedorDialogo = document.querySelector('.psicologa__contenedor__dialogo');
-const titoContenedorDialogo = document.querySelector('.tito__contenedor__dialogo')
-
-const titoImagen = document.querySelector('.tito__imagen');
-const psicologaImagen = document.querySelector('.psicologa__imagen');
 const itzelImagen = document.querySelector('.itzel__imagen')
-
-const titoContenedor = document.querySelector('.tito__contenedor');
-const psicologaContenedor = document.querySelector('.psicologa__contenedor');
 const itzelContenedor = document.querySelector('.itzel__contenedor');
 
-const contenedorParrafoTito = titoContenedorDialogo.querySelector('.tito__contenedor__parrafo');
-const contenedorParrafoPsicologa = psicologaContenedorDialogo.querySelector('.psicologa__contenedor__parrafo');
-
-const imagenCerrarDialogo = document.querySelector('.imagen_cerrar_dialogo_tito');
-const imagenCerrarDialogoPsicologa = document.querySelector('.imagen_cerrar_dialogo_psicologa');
 const audioLobby = document.querySelector('.audio_lobby');
-const audioTitto = document.querySelector('.audio_tito');
-const audioPsicologa = document.querySelector('.audio_psicologa');
 
 const buttonSonido = document.querySelector('.btn-sonido');
 const buttonDialogo = document.querySelector('.btn-dialogo');
@@ -109,12 +97,7 @@ titoImagen.addEventListener('click', async() => {
         addAnimation();
 
         if (dialogoIndice === 3) {
-            const btnContinuar = crearBotonContinuar(); 
-            contenedorParrafoTito.appendChild(btnContinuar); 
-            btnContinuar.addEventListener('click', () => {
-                configurarPosicionIntermedia(); 
-                contenedorParrafoTito.removeChild(btnContinuar);
-            })
+            crearBotonContinuar(contenedorParrafoTito)
         }
 
     }
@@ -136,21 +119,20 @@ psicologaContenedor.addEventListener('click', async() => {
         addAnimation()
 
         if (dialogoIndice == 5) {
-            const btnContinuar = crearBotonContinuar(); 
-            contenedorParrafoPsicologa.appendChild(btnContinuar); 
-            btnContinuar.addEventListener('click', () => {
-                configurarPosicionFinal(); 
-                contenedorParrafoPsicologa.removeChild(btnContinuar);
-            })
+            crearBotonContinuar(contenedorParrafoPsicologa);
         }
     }
 })
 
-function crearBotonContinuar(){
+function crearBotonContinuar(elemento){
     const buttonContinuar = document.createElement('button'); 
     buttonContinuar.textContent = 'Continuar';
     buttonContinuar.classList.add('btn-continuar', 'animate-clickable');
-    return buttonContinuar; 
+    elemento.appendChild(buttonContinuar); 
+    buttonContinuar.addEventListener('click', () => {
+        posicionarElementos();
+        elemento.removeChild(buttonContinuar)
+    })
 }
 
 function ocultarBotonDialogo(){
@@ -162,6 +144,7 @@ function mostarBotonDialogo(){
 }
 
 function addAnimation(){
+    if (dialogoIndice > dialogos.length) return;
     const currentCharacter = dialogos[dialogoIndice].persona;
     if(currentCharacter === 'Tito'){
         titoContenedor.classList.add('animate-clickable');
@@ -169,55 +152,7 @@ function addAnimation(){
         psicologaContenedor.classList.add('animate-clickable');
     }
 }
-
-// Configuración de personajes
-const IMAGENES_TITO = {
-    hablando: 'src/img/Titto-hablando.png',
-    normal: 'src/img/Tito.png'
-};
-
-const IMAGENES_PSICOLOGA = {
-    hablando: 'src/img/Psicologa-hablando.png',
-    normal: 'src/img/Psicologa.png'
-};
-
-// Funciones auxiliares para manejar elementos DOM
-function mostrarElemento(elemento) {
-    elemento.classList.remove('oculto');
-    elemento.classList.add('flex');
-}
-
-function ocultarElemento(elemento) {
-    elemento.classList.remove('flex');
-    elemento.classList.add('oculto');
-}
-
-function aplicarEstilos(elemento, estilos) {
-    Object.entries(estilos).forEach(([propiedad, valor]) => {
-        elemento.style[propiedad] = valor;
-    });
-}
-
 // Funciones de configuración de posiciones
-function configurarPosicionInicial() {
-    // Tito
-    aplicarEstilos(titoContenedor, {
-        gridColumnStart: '2',
-        gridColumnEnd: '3'
-    });
-    aplicarEstilos(titoContenedorDialogo, {
-        gridColumnStart: '3',
-        gridColumnEnd: '5'
-    });
-
-    // Itzel
-    aplicarEstilos(itzelContenedor, { height: '95%' });
-    aplicarEstilos(itzelImagen, { transform: 'scale(1.2)' });
-
-    // Ocultar psicóloga
-    psicologaContenedor.classList.add('oculto');
-    psicologaContenedorDialogo.classList.add('oculto');
-}
 
 function configurarPosicionIntermedia() {
 
@@ -326,7 +261,7 @@ async function mostrarDialogo() {
     if (isTyping) return;
     isTyping = true;
 
-    await posicionarElementos();
+    posicionarElementos();
     
     const dialogo = dialogos[dialogoIndice];
 
@@ -342,19 +277,12 @@ async function mostrarDialogo() {
 
 // Función de posicionamiento de elementos
 async function posicionarElementos() {
-    return new Promise((resolve) => {
-
-        // Determinar configuración según el índice
-        if (dialogoIndice < 3) {
-            configurarPosicionInicial();
-        } else if (dialogoIndice === 3 || dialogoIndice === 4) {
-            configurarPosicionIntermedia();
-        } else if (dialogoIndice >= 5) {
-            configurarPosicionFinal();
-        }
-
-        resolve();
-    });
+     // Determinar configuración según el índice
+    if (dialogoIndice === 3) {
+        configurarPosicionIntermedia();
+    } else if (dialogoIndice === 5) {
+        configurarPosicionFinal();
+    }
 }
 
 async function generarEfectoTyping(texto, elemento, velocidad = 50) {
