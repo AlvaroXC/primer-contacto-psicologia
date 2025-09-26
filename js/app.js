@@ -29,29 +29,50 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 imagenCerrarDialogoPsicologa.addEventListener('click', () => {
-    if(isTyping) return;
-    dialogoOculto = psicologaContenedorDialogo;
-    ocultarElemento(dialogoOculto);
-    btnDialogoActivated = true;
-    mostarBotonDialogo()
+    establecerDialogoOculto(psicologaContenedorDialogo);
 })
 
 imagenCerrarDialogo.addEventListener('click', () => {
-    if(isTyping) return;
-    dialogoOculto = titoContenedorDialogo;
-    ocultarElemento(dialogoOculto); 
-    btnDialogoActivated = true;
-    mostarBotonDialogo();
+    establecerDialogoOculto(titoContenedorDialogo)
 })
 
-buttonDialogo.addEventListener('click', () => {
-    ocultarBotonDialogo();
-    btnDialogoActivated = false;
-    mostrarElemento(dialogoOculto);
+buttonDialogo.addEventListener('click', mostrarDialogoOculto)
+
+buttonSonido.addEventListener('click', reproducirAudioLobby)
+
+titoImagen.addEventListener('click', async() => {
+    await manejarDialogos(titoContenedor, reproductirAudioTito, pausarAudioTito);
+    if (dialogoIndice === 3) {
+        crearBotonContinuar(contenedorParrafoTito)
+    }
 })
 
-buttonSonido.addEventListener('click', ()=>{
-    //proxima funcionalidad, después de dar click
+psicologaContenedor.addEventListener('click', async() => {
+    await manejarDialogos(psicologaContenedor, reproductiAudioPsicologa, pausarAudioPsicologa);
+
+    if (dialogoIndice == 5) {
+        crearBotonContinuar(contenedorParrafoPsicologa);
+    }
+})
+
+async function manejarDialogos(elemento, reproducirAudioPersonaje, pausarAudioPersonaje){
+    if (dialogoIndice < dialogos.length && !isTyping) {
+        if(btnDialogoActivated){
+            btnDialogoActivated = false;
+            ocultarBotonDialogo();
+        }
+        elemento.classList.remove('animate-clickable');
+        elemento.classList.add('animate-talking');
+        reproducirAudioPersonaje();
+        await mostrarDialogo();
+        pausarAudioPersonaje();
+        elemento.classList.remove('animate-talking')
+        dialogoIndice++;
+        addAnimation()
+    }
+}
+
+function reproducirAudioLobby(){
     audioLobby.loop = true; 
     if(audioLobby.paused){
         btnSonidoImagen.src =imagenes_btn_sonido.sonido_on;
@@ -60,9 +81,23 @@ buttonSonido.addEventListener('click', ()=>{
         btnSonidoImagen.src = imagenes_btn_sonido.sonido_off;
         audioLobby.pause();
     }
-})
+}
 
-function reproductiAudioTito(){
+function establecerDialogoOculto(elemento){
+    if(isTyping) return;
+    dialogoOculto = elemento;
+    ocultarElemento(dialogoOculto); 
+    btnDialogoActivated = true;
+    mostarBotonDialogo();
+}
+
+function mostrarDialogoOculto(){
+    ocultarBotonDialogo();
+    btnDialogoActivated = false;
+    mostrarElemento(dialogoOculto);
+}
+
+function reproductirAudioTito(){
     audioTitto.loop = true; 
     audioTitto.playbackRate = 1.2;
     audioTitto.play();
@@ -80,49 +115,6 @@ function reproductiAudioPsicologa(){
 function pausarAudioPsicologa(){
     audioPsicologa.pause();
 }
-
-titoImagen.addEventListener('click', async() => {
-    if (dialogoIndice < dialogos.length && !isTyping) {
-        if(btnDialogoActivated){
-            btnDialogoActivated = false;
-            ocultarBotonDialogo();
-        }
-        titoContenedor.classList.remove('animate-clickable');
-        titoContenedor.classList.add('animate-talking');
-        reproductiAudioTito();
-        await mostrarDialogo();
-        pausarAudioTito();
-        titoContenedor.classList.remove('animate-talking')
-        dialogoIndice++;
-        addAnimation();
-
-        if (dialogoIndice === 3) {
-            crearBotonContinuar(contenedorParrafoTito)
-        }
-
-    }
-})
-
-psicologaContenedor.addEventListener('click', async() => {
-    if (dialogoIndice < dialogos.length && !isTyping) {
-        if(btnDialogoActivated){
-            btnDialogoActivated = false;
-            ocultarBotonDialogo();
-        }
-        psicologaContenedor.classList.remove('animate-clickable');
-        psicologaContenedor.classList.add('animate-talking');
-        reproductiAudioPsicologa();
-        await mostrarDialogo();
-        pausarAudioPsicologa();
-        psicologaContenedor.classList.remove('animate-talking')
-        dialogoIndice++;
-        addAnimation()
-
-        if (dialogoIndice == 5) {
-            crearBotonContinuar(contenedorParrafoPsicologa);
-        }
-    }
-})
 
 function crearBotonContinuar(elemento){
     const buttonContinuar = document.createElement('button'); 
@@ -144,7 +136,7 @@ function mostarBotonDialogo(){
 }
 
 function addAnimation(){
-    if (dialogoIndice > dialogos.length) return;
+    if (dialogoIndice > dialogos.length-1) return;
     const currentCharacter = dialogos[dialogoIndice].persona;
     if(currentCharacter === 'Tito'){
         titoContenedor.classList.add('animate-clickable');
