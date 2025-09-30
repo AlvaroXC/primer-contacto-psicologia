@@ -24,8 +24,8 @@ let dialogoOculto;
 let btnDialogoActivated = false;   
 
 document.addEventListener('DOMContentLoaded', () => {
-    addAnimation();
     ocultarBotonDialogo();
+    addAnimation();
 })
 
 imagenCerrarDialogoPsicologa.addEventListener('click', () => {
@@ -40,20 +40,32 @@ buttonDialogo.addEventListener('click', mostrarDialogoOculto)
 
 buttonSonido.addEventListener('click', reproducirAudioLobby)
 
-titoImagen.addEventListener('click', async() => {
-    await manejarDialogos(titoContenedor, reproductirAudioTito, pausarAudioTito);
-    if (dialogoIndice === 3) {
-        crearBotonContinuar(contenedorParrafoTito)
-    }
-})
+// Función para el clic en Tito
+const clickTito = () => {
+    manejarClicPersonaje(titoContenedor, reproductirAudioTito, pausarAudioTito, 3, contenedorParrafoTito);
+};
 
-psicologaContenedor.addEventListener('click', async() => {
-    await manejarDialogos(psicologaContenedor, reproductiAudioPsicologa, pausarAudioPsicologa);
+// Función para el clic en la Psicóloga
+const clickPsicologa = () => {
+    manejarClicPersonaje(psicologaContenedor, reproductiAudioPsicologa, pausarAudioPsicologa, 5, contenedorParrafoPsicologa);
+};
 
-    if (dialogoIndice == 5) {
-        crearBotonContinuar(contenedorParrafoPsicologa);
+titoImagen.addEventListener('click', clickTito);
+
+psicologaImagen.addEventListener('click', clickPsicologa);
+
+
+
+
+const manejarClicPersonaje = async (contenedor, reproducirAudio, pausarAudio, indiceFinal, contenedorParrafo) => {
+    // Se utiliza await para esperar a que los diálogos terminen.
+    await manejarDialogos(contenedor, reproducirAudio, pausarAudio);
+
+    // Se verifica si el índice del diálogo ha alcanzado el punto de crear el botón.
+    if (dialogoIndice === indiceFinal) {
+        crearBotonContinuar(contenedorParrafo);
     }
-})
+};
 
 async function manejarDialogos(elemento, reproducirAudioPersonaje, pausarAudioPersonaje){
     if (dialogoIndice < dialogos.length && !isTyping) {
@@ -140,8 +152,12 @@ function addAnimation(){
     const currentCharacter = dialogos[dialogoIndice].persona;
     if(currentCharacter === 'Tito'){
         titoContenedor.classList.add('animate-clickable');
+        psicologaContenedor.removeEventListener('click', clickPsicologa)
+        titoImagen.addEventListener('click', clickTito);
     }else if(currentCharacter === 'Psicóloga'){
         psicologaContenedor.classList.add('animate-clickable');
+        titoImagen.removeEventListener('click', clickTito); 
+        psicologaContenedor.addEventListener('click', clickPsicologa)  
     }
 }
 // Funciones de configuración de posiciones
