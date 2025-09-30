@@ -13,6 +13,12 @@ const buttonDialogo = document.querySelector('.btn-dialogo');
 
 const btnSonidoImagen = document.querySelector('.btn-sonido img');
 
+const modal = document.getElementById('modal'); 
+
+const modalContenidoVideo = document.querySelector('.video__tutorial');;
+
+const btnCerrarModal = document.querySelector('.modal__contenido__cerrar');
+
 const imagenes_btn_sonido = {
     sonido_on: 'src/img/sound_on_3d.png',
     sonido_off: 'src/img/sound_off_3d.png'
@@ -24,8 +30,14 @@ let dialogoOculto;
 let btnDialogoActivated = false;   
 
 document.addEventListener('DOMContentLoaded', () => {
+    reproducirVideoTutorial();
     ocultarBotonDialogo();
+})
+
+btnCerrarModal.addEventListener('click', () => {
+    modal.style.display = 'none'; 
     addAnimation();
+    reproducirAudioLobby();
 })
 
 imagenCerrarDialogoPsicologa.addEventListener('click', () => {
@@ -50,13 +62,6 @@ const clickPsicologa = () => {
     manejarClicPersonaje(psicologaContenedor, reproductiAudioPsicologa, pausarAudioPsicologa, 5, contenedorParrafoPsicologa);
 };
 
-titoImagen.addEventListener('click', clickTito);
-
-psicologaImagen.addEventListener('click', clickPsicologa);
-
-
-
-
 const manejarClicPersonaje = async (contenedor, reproducirAudio, pausarAudio, indiceFinal, contenedorParrafo) => {
     // Se utiliza await para esperar a que los diálogos terminen.
     await manejarDialogos(contenedor, reproducirAudio, pausarAudio);
@@ -66,6 +71,16 @@ const manejarClicPersonaje = async (contenedor, reproducirAudio, pausarAudio, in
         crearBotonContinuar(contenedorParrafo);
     }
 };
+
+async function reproducirVideoTutorial(){
+    modalContenidoVideo.loop = true;
+    try {
+        await modalContenidoVideo.play();
+    } catch (err) {
+        console.error("La reproducción automática del video fue bloqueada por el navegador.", err);
+        // Opcional: Podrías mostrar un botón de play sobre el video si la reproducción automática falla.
+    }
+}
 
 async function manejarDialogos(elemento, reproducirAudioPersonaje, pausarAudioPersonaje){
     if (dialogoIndice < dialogos.length && !isTyping) {
@@ -300,6 +315,3 @@ async function generarEfectoTyping(texto, elemento, velocidad = 50) {
         await new Promise(resolve => setTimeout(resolve, velocidad));
     }
 }
-
-
-
