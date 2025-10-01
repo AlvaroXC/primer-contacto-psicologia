@@ -14,20 +14,26 @@ const buttonDialogo = document.querySelector('.btn-dialogo');
 const btnSonidoImagen = document.querySelector('.btn-sonido img');
 
 const modal = document.getElementById('modal'); 
+const modalContenedorContenidoVisual = document.querySelector('.modal__contenido-visual'); 
 
 const modalContenidoVideo = document.querySelector('.video__tutorial');;
 
 const btnCerrarModal = document.querySelector('.modal__contenido__cerrar');
+
+const btnGaleria = document.querySelector('.btn-galeria');
 
 const imagenes_btn_sonido = {
     sonido_on: 'src/img/sound_on_3d.png',
     sonido_off: 'src/img/sound_off_3d.png'
 }
 
+const IMAGEN_SALA_PSICOLOGIA = 'src/img/fiscalia.png'
+
 let dialogoIndice = 0; 
 let isTyping = false; 
 let dialogoOculto;
-let btnDialogoActivated = false;   
+let btnDialogoActivated = false;  
+let isGaleriaModalOpen = false; 
 
 document.addEventListener('DOMContentLoaded', () => {
     reproducirVideoTutorial();
@@ -35,9 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 btnCerrarModal.addEventListener('click', () => {
-    modal.style.display = 'none'; 
-    addAnimation();
-    reproducirAudioLobby();
+    if(!isGaleriaModalOpen){
+        addAnimation();
+        reproducirAudioLobby();
+    }
+    aplicarEstilos(modal, {display: 'none'});
+    isGaleriaModalOpen = false;
+    
 })
 
 imagenCerrarDialogoPsicologa.addEventListener('click', () => {
@@ -51,6 +61,29 @@ imagenCerrarDialogo.addEventListener('click', () => {
 buttonDialogo.addEventListener('click', mostrarDialogoOculto)
 
 buttonSonido.addEventListener('click', reproducirAudioLobby)
+
+btnGaleria.addEventListener('click', () => {
+    isGaleriaModalOpen = true; 
+    const contenidoVisual = modalContenedorContenidoVisual.firstElementChild;
+    if(contenidoVisual.tagName === 'VIDEO'){
+        cambiarContenidoModal();
+    }
+    aplicarEstilos(modal, {display: 'flex'});
+})
+
+function cambiarContenidoModal(){
+    const modalContenidoHeading = document.querySelector('.modal__contenido h4');
+    const modalContenidoParrafo = document.querySelector('.modal__contenido p'); 
+
+    modalContenedorContenidoVisual.removeChild(modalContenedorContenidoVisual.firstElementChild); 
+    
+    const nuevaImagen = document.createElement('img'); 
+    nuevaImagen.src = IMAGEN_SALA_PSICOLOGIA;
+    modalContenedorContenidoVisual.appendChild(nuevaImagen);
+    modalContenidoHeading.textContent = 'Sala de Psicología';
+    modalContenidoParrafo.textContent = 'Esta es una imagen real de cómo se ve este lugar en la vida real. De esta manera, si un día llegas a ir, ¡ya sabrás cómo es!'
+    btnCerrarModal.textContent = 'Cerrar'; 
+}
 
 // Función para el clic en Tito
 const clickTito = () => {

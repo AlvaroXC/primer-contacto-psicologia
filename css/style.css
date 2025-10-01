@@ -330,7 +330,7 @@ h1, p{
     filter: brightness(150%);
 }
 
-.btn-dialogo, .btn-sonido{
+.btn-dialogo, .btn-sonido, .btn-galeria{
     padding: 0;
     background-color: transparent;
     border: none;
@@ -346,7 +346,7 @@ h1, p{
     right: 10%;
 }
 
-.btn-dialogo:hover, .btn-sonido:hover{
+.btn-dialogo:hover, .btn-sonido:hover, .btn-galeria:hover{
     scale: 115%;
     rotate: 5;
     cursor: pointer;
@@ -445,4 +445,10 @@ h1, p{
 
 .video__tutorial{
     max-width: 100%;
+}
+
+
+.btn-galeria{
+    right: 8%;
+    bottom: 5%;
 }
