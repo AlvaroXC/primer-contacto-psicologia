@@ -27,7 +27,7 @@ const imagenes_btn_sonido = {
     sonido_off: 'src/img/sound_off_3d.png'
 }
 
-const IMAGEN_SALA_PSICOLOGIA = 'src/img/fiscalia.png'
+const IMAGEN_SALA_PSICOLOGIA = 'src/img/psicologia.jpeg'
 
 let dialogoIndice = 0; 
 let isTyping = false; 
@@ -85,21 +85,19 @@ function cambiarContenidoModal(){
     btnCerrarModal.textContent = 'Cerrar'; 
 }
 
-// Función para el clic en Tito
+
 const clickTito = () => {
-    manejarClicPersonaje(titoContenedor, reproductirAudioTito, pausarAudioTito, 3, contenedorParrafoTito);
+    manejarClicPersonaje(titoContenedor, 3, contenedorParrafoTito);
 };
 
-// Función para el clic en la Psicóloga
 const clickPsicologa = () => {
-    manejarClicPersonaje(psicologaContenedor, reproductiAudioPsicologa, pausarAudioPsicologa, 5, contenedorParrafoPsicologa);
+    manejarClicPersonaje(psicologaContenedor, 5, contenedorParrafoPsicologa);
 };
 
-const manejarClicPersonaje = async (contenedor, reproducirAudio, pausarAudio, indiceFinal, contenedorParrafo) => {
-    // Se utiliza await para esperar a que los diálogos terminen.
-    await manejarDialogos(contenedor, reproducirAudio, pausarAudio);
+const manejarClicPersonaje = async (contenedor, indiceFinal, contenedorParrafo) => {
 
-    // Se verifica si el índice del diálogo ha alcanzado el punto de crear el botón.
+    await manejarDialogos(contenedor);
+
     if (dialogoIndice === indiceFinal) {
         crearBotonContinuar(contenedorParrafo);
     }
@@ -111,11 +109,10 @@ async function reproducirVideoTutorial(){
         await modalContenidoVideo.play();
     } catch (err) {
         console.error("La reproducción automática del video fue bloqueada por el navegador.", err);
-        // Opcional: Podrías mostrar un botón de play sobre el video si la reproducción automática falla.
     }
 }
 
-async function manejarDialogos(elemento, reproducirAudioPersonaje, pausarAudioPersonaje){
+async function manejarDialogos(elemento){
     if (dialogoIndice < dialogos.length && !isTyping) {
         if(btnDialogoActivated){
             btnDialogoActivated = false;
@@ -123,9 +120,7 @@ async function manejarDialogos(elemento, reproducirAudioPersonaje, pausarAudioPe
         }
         elemento.classList.remove('animate-clickable');
         elemento.classList.add('animate-talking');
-        reproducirAudioPersonaje();
         await mostrarDialogo();
-        pausarAudioPersonaje();
         elemento.classList.remove('animate-talking')
         dialogoIndice++;
         addAnimation()
@@ -155,25 +150,6 @@ function mostrarDialogoOculto(){
     ocultarBotonDialogo();
     btnDialogoActivated = false;
     mostrarElemento(dialogoOculto);
-}
-
-function reproductirAudioTito(){
-    audioTitto.loop = true; 
-    audioTitto.playbackRate = 1.2;
-    audioTitto.play();
-}
-
-function pausarAudioTito(){
-    audioTitto.pause();
-}
-
-function reproductiAudioPsicologa(){
-    audioPsicologa.loop = true; 
-    audioPsicologa.play();
-}
-
-function pausarAudioPsicologa(){
-    audioPsicologa.pause();
 }
 
 function crearBotonContinuar(elemento){
@@ -208,7 +184,6 @@ function addAnimation(){
         psicologaContenedor.addEventListener('click', clickPsicologa)  
     }
 }
-// Funciones de configuración de posiciones
 
 function configurarPosicionIntermedia() {
 
@@ -276,43 +251,36 @@ function configurarPosicionFinal() {
     aplicarEstilos(itzelImagen, { transform: 'scale(1.2)' });
 }
 
-// Funciones de diálogo por personaje
 async function mostrarDialogoTito(dialogo) {
-    // Actualizar imágenes
     titoImagen.src = IMAGENES_TITO.hablando;
     psicologaImagen.src = IMAGENES_PSICOLOGA.normal;
 
-    // Mostrar/ocultar contenedores de diálogo
     mostrarElemento(titoContenedorDialogo);
     ocultarElemento(psicologaContenedorDialogo);
 
-    // Generar efecto typing
     const titoParrafo = titoContenedorDialogo.querySelector('.tito__dialogo__parrafo');
     const titoHeadImagen = titoContenedorDialogo.querySelector('.tito__head__imagen');
     titoHeadImagen.classList.add('animate-talking-minihead');
-    await generarEfectoTyping(dialogo.texto, titoParrafo);
+    await generarEfectoTyping(dialogo.texto, titoParrafo,'Tito');
     titoHeadImagen.classList.remove('animate-talking-minihead');
 }
 
 async function mostrarDialogoPsicologa(dialogo) {
-    // Actualizar imágenes
+
     titoImagen.src = IMAGENES_TITO.normal;
     psicologaImagen.src = IMAGENES_PSICOLOGA.hablando;
 
-    // Mostrar/ocultar contenedores de diálogo
     mostrarElemento(psicologaContenedorDialogo);
     ocultarElemento(titoContenedorDialogo);
 
-    // Generar efecto typing
     const psicologaParrafo = psicologaContenedorDialogo.querySelector('.psicologa__dialogo__parrafo');
     const psicologaHeadImagen = document.querySelector('.psicologa__head__imagen');
     psicologaHeadImagen.classList.add('animate-talking-minihead');
-    await generarEfectoTyping(dialogo.texto, psicologaParrafo);
+    await generarEfectoTyping(dialogo.texto, psicologaParrafo,'Psicologa');
     psicologaHeadImagen.classList.remove('animate-talking-minihead');
 
 }
 
-// Función principal de mostrar diálogo
 async function mostrarDialogo() {
     if (isTyping) return;
     isTyping = true;
@@ -321,7 +289,6 @@ async function mostrarDialogo() {
     
     const dialogo = dialogos[dialogoIndice];
 
-    // Mostrar el diálogo según el personaje
     if (dialogo.persona === 'Tito') {
         await mostrarDialogoTito(dialogo);
     } else if (dialogo.persona === 'Psicóloga') {
@@ -331,9 +298,8 @@ async function mostrarDialogo() {
     isTyping = false;
 }
 
-// Función de posicionamiento de elementos
+
 async function posicionarElementos() {
-     // Determinar configuración según el índice
     if (dialogoIndice === 3) {
         configurarPosicionIntermedia();
     } else if (dialogoIndice === 5) {
@@ -341,10 +307,42 @@ async function posicionarElementos() {
     }
 }
 
-async function generarEfectoTyping(texto, elemento, velocidad = 50) {
-    elemento.textContent = ""; // limpiar antes
+async function generarEfectoTyping(texto, elemento, characterName, velocidad = 30) {
+    elemento.textContent = ""; 
+
+    let wordCounter = 0; 
+    const WORDS_PER_SOUND = 3; 
+
+    const audioSrc = characterName === 'Tito' ? audioTitto.src : audioPsicologa.src;
+
     for (let i = 0; i < texto.length; i++) {
         elemento.textContent += texto[i];
+        const prevChar = i > 0 ? texto[i - 1] : ' ';
+        const isWordBoundary = prevChar === ' ' || /[.!?;:]/.test(prevChar);
+
+        if (isWordBoundary && texto[i] !== ' ') {
+            wordCounter++;
+            if (wordCounter % WORDS_PER_SOUND === 0) {
+                playFluidSpeechSound(audioSrc);
+            }
+        }
         await new Promise(resolve => setTimeout(resolve, velocidad));
     }
+}
+
+function playFluidSpeechSound(url, volume = 0.7) {
+    const audio = new Audio(url); 
+
+    const randomPitch = 0.8 + Math.random() * 0.4;
+    
+    audio.playbackRate = randomPitch; 
+    audio.preservesPitch = false; 
+
+    audio.volume = volume;
+
+    audio.currentTime = 0;
+    
+    audio.play().catch(e => {
+        console.error("Error al reproducir sonido fluido:", e);
+    });
 }
