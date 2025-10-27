@@ -2,7 +2,7 @@ const psicologaContenedorDialogo = document.querySelector('.psicologa__contenedo
 const psicologaImagen = document.querySelector('.psicologa__imagen');
 const psicologaContenedor = document.querySelector('.psicologa__contenedor');
 const contenedorParrafoPsicologa = psicologaContenedorDialogo.querySelector('.psicologa__contenedor__parrafo');
-const audioPsicologa = { src: './../src/itzel_voice.mp3' }; 
+const AUDIO_PSICOLOGA = { src: 'src/itzel_voice.mp3' }; 
 const imagenCerrarDialogoPsicologa = document.querySelector('.imagen_cerrar_dialogo_psicologa');
 const IMAGENES_PSICOLOGA = {
     hablando: 'src/img/Psicologa-hablando.png',
@@ -15,7 +15,7 @@ export {
     psicologaImagen, 
     psicologaContenedor, 
     contenedorParrafoPsicologa, 
-    audioPsicologa, 
+    AUDIO_PSICOLOGA, 
     imagenCerrarDialogoPsicologa, 
     IMAGENES_PSICOLOGA
 }

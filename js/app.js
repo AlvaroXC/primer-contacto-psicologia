@@ -1,15 +1,15 @@
 import { dialogos } from "./dialogos.js";
 import { mostrarElemento, ocultarElemento, aplicarEstilos } from "./helpers.js";
-import { titoContenedorDialogo, titoImagen, titoContenedor, contenedorParrafoTito, audioTitto, imagenCerrarDialogo, IMAGENES_TITO} from "./tito.js"; 
-import { psicologaContenedorDialogo, psicologaImagen, psicologaContenedor, contenedorParrafoPsicologa, audioPsicologa, imagenCerrarDialogoPsicologa, IMAGENES_PSICOLOGA} from "./psicologa.js";
+import { titoContenedorDialogo, titoImagen, titoContenedor, contenedorParrafoTito, AUDIO_TITO, imagenCerrarDialogo, IMAGENES_TITO} from "./tito.js"; 
+import { psicologaContenedorDialogo, psicologaImagen, psicologaContenedor, contenedorParrafoPsicologa, AUDIO_PSICOLOGA, imagenCerrarDialogoPsicologa, IMAGENES_PSICOLOGA} from "./psicologa.js";
 
 const itzelImagen = document.querySelector('.itzel__imagen')
 const itzelContenedor = document.querySelector('.itzel__contenedor');
 
 const audioLobby = document.querySelector('.audio_lobby');
 
-const buttonSonido = document.querySelector('.btn-sonido');
-const buttonDialogo = document.querySelector('.btn-dialogo');
+const btnSonido = document.querySelector('.btn-sonido');
+const btnDialogo = document.querySelector('.btn-dialogo');
 
 const btnSonidoImagen = document.querySelector('.btn-sonido img');
 
@@ -22,7 +22,7 @@ const btnCerrarModal = document.querySelector('.modal__contenido__cerrar');
 
 const btnGaleria = document.querySelector('.btn-galeria');
 
-const imagenes_btn_sonido = {
+const IMAGENES_BTN_SONIDO = {
     sonido_on: 'src/img/sound_on_3d.png',
     sonido_off: 'src/img/sound_off_3d.png'
 }
@@ -58,9 +58,9 @@ imagenCerrarDialogo.addEventListener('click', () => {
     establecerDialogoOculto(titoContenedorDialogo)
 })
 
-buttonDialogo.addEventListener('click', mostrarDialogoOculto)
+btnDialogo.addEventListener('click', mostrarDialogoOculto)
 
-buttonSonido.addEventListener('click', reproducirAudioLobby)
+btnSonido.addEventListener('click', reproducirAudioLobby)
 
 btnGaleria.addEventListener('click', () => {
     isGaleriaModalOpen = true; 
@@ -80,11 +80,11 @@ function cambiarContenidoModal(){
     const nuevaImagen = document.createElement('img'); 
     nuevaImagen.src = IMAGEN_SALA_PSICOLOGIA;
     modalContenedorContenidoVisual.appendChild(nuevaImagen);
+
     modalContenidoHeading.textContent = 'Sala de Psicología';
     modalContenidoParrafo.textContent = 'Esta es una imagen real de cómo se ve este lugar en la vida real. De esta manera, si un día llegas a ir, ¡ya sabrás cómo es!'
     btnCerrarModal.textContent = 'Cerrar'; 
 }
-
 
 const clickTito = () => {
     manejarClicPersonaje(titoContenedor, 3, contenedorParrafoTito);
@@ -99,7 +99,7 @@ const manejarClicPersonaje = async (contenedor, indiceFinal, contenedorParrafo) 
     await manejarDialogos(contenedor);
 
     if (dialogoIndice === indiceFinal) {
-        crearBotonContinuar(contenedorParrafo);
+        crearBotonContinuarEnElemento(contenedorParrafo);
     }
 };
 
@@ -130,10 +130,10 @@ async function manejarDialogos(elemento){
 function reproducirAudioLobby(){
     audioLobby.loop = true; 
     if(audioLobby.paused){
-        btnSonidoImagen.src =imagenes_btn_sonido.sonido_on;
+        btnSonidoImagen.src =IMAGENES_BTN_SONIDO.sonido_on;
         audioLobby.play();
     }else{
-        btnSonidoImagen.src = imagenes_btn_sonido.sonido_off;
+        btnSonidoImagen.src = IMAGENES_BTN_SONIDO.sonido_off;
         audioLobby.pause();
     }
 }
@@ -152,7 +152,7 @@ function mostrarDialogoOculto(){
     mostrarElemento(dialogoOculto);
 }
 
-function crearBotonContinuar(elemento){
+function crearBotonContinuarEnElemento(elemento){
     const buttonContinuar = document.createElement('button'); 
     buttonContinuar.textContent = 'Continuar';
     buttonContinuar.classList.add('btn-continuar', 'animate-clickable');
@@ -164,16 +164,16 @@ function crearBotonContinuar(elemento){
 }
 
 function ocultarBotonDialogo(){
-    buttonDialogo.style.display = 'none';
+    btnDialogo.style.display = 'none';
 }
 
 function mostarBotonDialogo(){
-    buttonDialogo.style.display = 'inline-block';
+    btnDialogo.style.display = 'inline-block';
 }
 
 function addAnimation(){
     if (dialogoIndice > dialogos.length-1) return;
-    const currentCharacter = dialogos[dialogoIndice].persona;
+    const currentCharacter = dialogos[dialogoIndice].personaje;
     if(currentCharacter === 'Tito'){
         titoContenedor.classList.add('animate-clickable');
         psicologaContenedor.removeEventListener('click', clickPsicologa)
@@ -225,7 +225,6 @@ function configurarPosicionFinal() {
         gridColumnEnd: '6'
     });
     titoContenedor.classList.remove('oculto');
-    // titoContenedorDialogo.classList.remove('oculto');
 
     psicologaImagen.src = IMAGENES_PSICOLOGA.normal;
     ocultarElemento(psicologaContenedorDialogo);
@@ -267,8 +266,8 @@ async function mostrarDialogoTito(dialogo) {
 
 async function mostrarDialogoPsicologa(dialogo) {
 
-    titoImagen.src = IMAGENES_TITO.normal;
     psicologaImagen.src = IMAGENES_PSICOLOGA.hablando;
+    titoImagen.src = IMAGENES_TITO.normal;
 
     mostrarElemento(psicologaContenedorDialogo);
     ocultarElemento(titoContenedorDialogo);
@@ -289,9 +288,9 @@ async function mostrarDialogo() {
     
     const dialogo = dialogos[dialogoIndice];
 
-    if (dialogo.persona === 'Tito') {
+    if (dialogo.personaje === 'Tito') {
         await mostrarDialogoTito(dialogo);
-    } else if (dialogo.persona === 'Psicóloga') {
+    } else if (dialogo.personaje === 'Psicóloga') {
         await mostrarDialogoPsicologa(dialogo);
     }
 
@@ -313,7 +312,7 @@ async function generarEfectoTyping(texto, elemento, characterName, velocidad = 3
     let wordCounter = 0; 
     const WORDS_PER_SOUND = 3; 
 
-    const audioSrc = characterName === 'Tito' ? audioTitto.src : audioPsicologa.src;
+    const audioSrc = characterName === 'Tito' ? AUDIO_TITO.src : AUDIO_PSICOLOGA.src;
 
     for (let i = 0; i < texto.length; i++) {
         elemento.textContent += texto[i];
