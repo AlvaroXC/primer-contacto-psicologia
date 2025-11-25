@@ -3,36 +3,69 @@ import { mostrarElemento, ocultarElemento, aplicarEstilos } from "./helpers.js";
 import { titoContenedorDialogo, titoImagen, titoContenedor, contenedorParrafoTito, AUDIO_TITO, imagenCerrarDialogo, IMAGENES_TITO} from "./tito.js"; 
 import { psicologaContenedorDialogo, psicologaImagen, psicologaContenedor, contenedorParrafoPsicologa, AUDIO_PSICOLOGA, imagenCerrarDialogoPsicologa, IMAGENES_PSICOLOGA} from "./psicologa.js";
 
+/** @type {HTMLElement} Elemento de imagen de Itzel */
 const itzelImagen = document.querySelector('.itzel__imagen')
+
+/** @type {HTMLElement} Contenedor principal de Itzel */
 const itzelContenedor = document.querySelector('.itzel__contenedor');
 
+/** @type {HTMLAudioElement} Audio de fondo del lobby */
 const audioLobby = document.querySelector('.audio_lobby');
 
+/** @type {HTMLButtonElement} Botón para controlar el sonido */
 const btnSonido = document.querySelector('.btn-sonido');
+
+/** @type {HTMLButtonElement} Botón para mostrar diálogos ocultos */
 const btnDialogo = document.querySelector('.btn-dialogo');
 
+/** @type {HTMLImageElement} Imagen del botón de sonido */
 const btnSonidoImagen = document.querySelector('.btn-sonido img');
 
+/** @type {HTMLElement} Elemento modal principal */
 const modal = document.getElementById('modal'); 
+
+/** @type {HTMLElement} Contenedor del contenido visual del modal */
 const modalContenedorContenidoVisual = document.querySelector('.modal__contenido-visual'); 
 
+/** @type {HTMLVideoElement} Video tutorial del modal */
 const modalContenidoVideo = document.querySelector('.video__tutorial');;
 
+/** @type {HTMLButtonElement} Botón para cerrar el modal */
 const btnCerrarModal = document.querySelector('.modal__contenido__cerrar');
 
+/** @type {HTMLButtonElement} Botón para abrir la galería */
 const btnGaleria = document.querySelector('.btn-galeria');
 
+/**
+ * Rutas de las imágenes para el botón de sonido
+ * @constant {Object}
+ * @property {string} sonido_on - Ruta de la imagen cuando el sonido está activado
+ * @property {string} sonido_off - Ruta de la imagen cuando el sonido está desactivado
+ */
 const IMAGENES_BTN_SONIDO = {
     sonido_on: 'src/img/sound_on_3d.png',
     sonido_off: 'src/img/sound_off_3d.png'
 }
 
+/**
+ * Ruta de la imagen de la sala de psicología
+ * @constant {string}
+ */
 const IMAGEN_SALA_PSICOLOGIA = 'src/img/psicologia.jpeg'
 
+/** @type {number} Índice actual del diálogo en reproducción */
 let dialogoIndice = 0; 
+
+/** @type {boolean} Indica si se está ejecutando el efecto de escritura */
 let isTyping = false; 
+
+/** @type {HTMLElement|undefined} Referencia al diálogo que está oculto */
 let dialogoOculto;
+
+/** @type {boolean} Indica si el botón de diálogo está activado */
 let btnDialogoActivated = false;  
+
+/** @type {boolean} Indica si el modal de galería está abierto */
 let isGaleriaModalOpen = false; 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -71,6 +104,9 @@ btnGaleria.addEventListener('click', () => {
     aplicarEstilos(modal, {display: 'flex'});
 })
 
+/**
+ * Cambia el contenido del modal de video a imagen de la sala de psicología
+ */
 function cambiarContenidoModal(){
     const modalContenidoHeading = document.querySelector('.modal__contenido h4');
     const modalContenidoParrafo = document.querySelector('.modal__contenido p'); 
@@ -94,6 +130,13 @@ const clickPsicologa = () => {
     manejarClicPersonaje(psicologaContenedor, 5, contenedorParrafoPsicologa);
 };
 
+/**
+ * Maneja el clic en un personaje y crea botón de continuar si es necesario
+ * @async
+ * @param {HTMLElement} contenedor - Contenedor del personaje
+ * @param {number} indiceFinal - Índice en el que se debe crear el botón continuar
+ * @param {HTMLElement} contenedorParrafo - Contenedor donde se agregará el botón
+ */
 const manejarClicPersonaje = async (contenedor, indiceFinal, contenedorParrafo) => {
 
     await manejarDialogos(contenedor);
@@ -103,6 +146,11 @@ const manejarClicPersonaje = async (contenedor, indiceFinal, contenedorParrafo) 
     }
 };
 
+/**
+ * Reproduce el video tutorial en loop
+ * @async
+ * @throws {Error} Si la reproducción automática es bloqueada por el navegador
+ */
 async function reproducirVideoTutorial(){
     modalContenidoVideo.loop = true;
     try {
@@ -112,6 +160,11 @@ async function reproducirVideoTutorial(){
     }
 }
 
+/**
+ * Maneja la reproducción de diálogos para un elemento específico
+ * @async
+ * @param {HTMLElement} elemento - Elemento que mostrará el diálogo
+ */
 async function manejarDialogos(elemento){
     if (dialogoIndice < dialogos.length && !isTyping) {
         if(btnDialogoActivated){
@@ -152,6 +205,10 @@ function mostrarDialogoOculto(){
     mostrarElemento(dialogoOculto);
 }
 
+/**
+ * Crea y agrega un botón de continuar en el elemento especificado
+ * @param {HTMLElement} elemento - Elemento donde se agregará el botón
+ */
 function crearBotonContinuarEnElemento(elemento){
     const buttonContinuar = document.createElement('button'); 
     buttonContinuar.textContent = 'Continuar';
@@ -171,6 +228,10 @@ function mostarBotonDialogo(){
     btnDialogo.style.display = 'inline-block';
 }
 
+/**
+ * Agrega animación de clickable al personaje que debe hablar a continuación
+ * y gestiona los event listeners correspondientes
+ */
 function addAnimation(){
     if (dialogoIndice > dialogos.length-1) return;
     const currentCharacter = dialogos[dialogoIndice].personaje;
@@ -185,6 +246,12 @@ function addAnimation(){
     }
 }
 
+/**
+ * Configura la posición intermedia de los personajes a partir del dialogo 3
+ * - Oculta a Tito
+ * - Posiciona a la Psicóloga al centro
+ * - Ajusta el tamaño de Itzel
+ */
 function configurarPosicionIntermedia() {
 
     // Ocultar Tito
@@ -214,6 +281,12 @@ function configurarPosicionIntermedia() {
     aplicarEstilos(itzelImagen, { transform: 'scale(1)' });
 }
 
+/**
+ * Configura la posición final de los personajes a partir del dialogo 5
+ * - Muestra a Tito
+ * - Reposiciona a la Psicóloga
+ * - Ajusta el tamaño final de Itzel
+ */
 function configurarPosicionFinal() {
     // Tito
     aplicarEstilos(titoContenedor, {
@@ -250,6 +323,12 @@ function configurarPosicionFinal() {
     aplicarEstilos(itzelImagen, { transform: 'scale(1.2)' });
 }
 
+/**
+ * Muestra el diálogo del personaje Tito
+ * @async
+ * @param {Object} dialogo - Objeto con la información del diálogo
+ * @param {string} dialogo.texto - Texto del diálogo a mostrar
+ */
 async function mostrarDialogoTito(dialogo) {
     titoImagen.src = IMAGENES_TITO.hablando;
     psicologaImagen.src = IMAGENES_PSICOLOGA.normal;
@@ -264,6 +343,12 @@ async function mostrarDialogoTito(dialogo) {
     titoHeadImagen.classList.remove('animate-talking-minihead');
 }
 
+/**
+ * Muestra el diálogo del personaje Psicóloga
+ * @async
+ * @param {Object} dialogo - Objeto con la información del diálogo
+ * @param {string} dialogo.texto - Texto del diálogo a mostrar
+ */
 async function mostrarDialogoPsicologa(dialogo) {
 
     psicologaImagen.src = IMAGENES_PSICOLOGA.hablando;
@@ -280,6 +365,10 @@ async function mostrarDialogoPsicologa(dialogo) {
 
 }
 
+/**
+ * Muestra el diálogo actual según el personaje correspondiente
+ * @async
+ */
 async function mostrarDialogo() {
     if (isTyping) return;
     isTyping = true;
@@ -297,7 +386,10 @@ async function mostrarDialogo() {
     isTyping = false;
 }
 
-
+/**
+ * Posiciona los elementos según el índice actual del diálogo
+ * @async
+ */
 async function posicionarElementos() {
     if (dialogoIndice === 3) {
         configurarPosicionIntermedia();
@@ -306,6 +398,14 @@ async function posicionarElementos() {
     }
 }
 
+/**
+ * Genera un efecto de escritura tipo máquina de escribir con audio sincronizado
+ * @async
+ * @param {string} texto - Texto a mostrar con el efecto
+ * @param {HTMLElement} elemento - Elemento donde se mostrará el texto
+ * @param {string} characterName - Nombre del personaje que habla ('Tito' o 'Psicologa')
+ * @param {number} [velocidad=30] - Velocidad de escritura en milisegundos por carácter
+ */
 async function generarEfectoTyping(texto, elemento, characterName, velocidad = 30) {
     elemento.textContent = ""; 
 
@@ -322,14 +422,19 @@ async function generarEfectoTyping(texto, elemento, characterName, velocidad = 3
         if (isWordBoundary && texto[i] !== ' ') {
             wordCounter++;
             if (wordCounter % WORDS_PER_SOUND === 0) {
-                playFluidSpeechSound(audioSrc);
+                playFluentSound(audioSrc);
             }
         }
         await new Promise(resolve => setTimeout(resolve, velocidad));
     }
 }
 
-function playFluidSpeechSound(url, volume = 0.7) {
+/**
+ * Reproduce un sonido de voz con variación de tono para simular habla fluida
+ * @param {string} url - URL del archivo de audio
+ * @param {number} [volume=0.7] - Volumen del audio (0.0 a 1.0)
+ */
+function playFluentSound(url, volume = 0.7) {
     const audio = new Audio(url); 
 
     const randomPitch = 0.8 + Math.random() * 0.4;
